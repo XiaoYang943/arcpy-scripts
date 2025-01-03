@@ -1,7 +1,6 @@
 import arcpy
 
 def print_arcgis_config():
-    print(arcpy.metadata.Metadata)
     infos=arcpy.GetInstallInfo()
     for key, value in infos.items():
         print(u"{}={}".format(key, value))
