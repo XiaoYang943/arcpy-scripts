@@ -319,20 +319,20 @@ def create_sld(xml_content):
                                                    '</PolygonSymbolizer>'
 
                         elif 'Hatch' in pattern_type:
-                            pattern_size = pattern['Separation']
-                            pattern_dict = pattern['LineSymbol']['SymbolLayers']
-                            polygon_fill_hatch = manage_hatch_pattern_layer(pattern_dict)
-                            polygon_fill_pattern = '' + \
-                                                   '<PolygonSymbolizer>' + \
-                                                   '<Fill>' + \
-                                                   '<GraphicFill>' + \
-                                                   '<Graphic>%s' % polygon_fill_hatch + \
-                                                   '<Size>%s</Size>' % pattern_size + \
-                                                   '</Graphic>' + \
-                                                   '</GraphicFill>' + \
-                                                   '</Fill>' + \
-                                                   '</PolygonSymbolizer>'
-
+                            # pattern_size = pattern['Separation']
+                            # pattern_dict = pattern['LineSymbol']['SymbolLayers']
+                            # polygon_fill_hatch = manage_hatch_pattern_layer(pattern_dict)
+                            # polygon_fill_pattern = '' + \
+                            #                        '<PolygonSymbolizer>' + \
+                            #                        '<Fill>' + \
+                            #                        '<GraphicFill>' + \
+                            #                        '<Graphic>%s' % polygon_fill_hatch + \
+                            #                        '<Size>%s</Size>' % pattern_size + \
+                            #                        '</Graphic>' + \
+                            #                        '</GraphicFill>' + \
+                            #                        '</Fill>' + \
+                            #                        '</PolygonSymbolizer>'
+                            break
                         elif 'Marker' in pattern_type:
                             pattern_dict = pattern['Symbol']['SymbolLayers']
                             polygon_fill_marker = manage_graphic_marker(pattern_dict)
@@ -505,20 +505,20 @@ def create_sld(xml_content):
                                                '</PolygonSymbolizer>'
 
                     elif 'Hatch' in pattern_type:
-                        pattern_size = pattern['Separation']
-                        pattern_dict = pattern['LineSymbol']['SymbolLayers']
-                        polygon_fill_hatch = manage_hatch_pattern_layer(pattern_dict)
-                        polygon_fill_pattern = '' + \
-                                               '<PolygonSymbolizer>' + \
-                                               '<Fill>' + \
-                                               '<GraphicFill>' + \
-                                               '<Graphic>%s' % polygon_fill_hatch + \
-                                               '<Size>%s</Size>' % pattern_size + \
-                                               '</Graphic>' + \
-                                               '</GraphicFill>' + \
-                                               '</Fill>' + \
-                                               '</PolygonSymbolizer>'
-
+                        # pattern_size = pattern['Separation']
+                        # pattern_dict = pattern['LineSymbol']['SymbolLayers']
+                        # polygon_fill_hatch = manage_hatch_pattern_layer(pattern_dict)
+                        # polygon_fill_pattern = '' + \
+                        #                        '<PolygonSymbolizer>' + \
+                        #                        '<Fill>' + \
+                        #                        '<GraphicFill>' + \
+                        #                        '<Graphic>%s' % polygon_fill_hatch + \
+                        #                        '<Size>%s</Size>' % pattern_size + \
+                        #                        '</Graphic>' + \
+                        #                        '</GraphicFill>' + \
+                        #                        '</Fill>' + \
+                        #                        '</PolygonSymbolizer>'
+                        break;
                     elif 'Marker' in pattern_type:
                         pattern_dict = pattern['Symbol']['SymbolLayers']
                         polygon_fill_marker = manage_graphic_marker(pattern_dict)
