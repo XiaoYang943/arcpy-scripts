@@ -197,7 +197,7 @@ def create_sld(xml_content):
                     rules += '' + \
                              '<Rule>' + \
                              '<Name></Name>' + \
-                             min_scale_tag + max_scale_tag + point_symbolizer0 + text_symbolizer + \
+                             min_scale_tag + max_scale_tag + point_symbolizer0  + \
                              '</Rule>'
 
                 for symbol_layer in symbol_layers['CIMSymbolLayer']:
@@ -234,7 +234,7 @@ def create_sld(xml_content):
                 rule_symbolizer = rule_symbolizer[::-1]
                 rule_symbolizer.insert(0, max_scale_tag)
                 rule_symbolizer.insert(0, min_scale_tag)
-                rule_symbolizer.append(text_symbolizer)
+                # rule_symbolizer.append(text_symbolizer)
 
 
             # ================================================================================>
@@ -246,7 +246,7 @@ def create_sld(xml_content):
                     rules += '' + \
                              '<Rule>' + \
                              '<Name></Name>' + \
-                             min_scale_tag + max_scale_tag + line_symbolizer0 + text_symbolizer + \
+                             min_scale_tag + max_scale_tag + line_symbolizer0  + \
                              '</Rule>'
 
                 for symbol_layer in symbol_layers['CIMSymbolLayer']:
@@ -274,7 +274,7 @@ def create_sld(xml_content):
                 rule_symbolizer = rule_symbolizer[::-1]
                 rule_symbolizer.insert(0, max_scale_tag)
                 rule_symbolizer.insert(0, min_scale_tag)
-                rule_symbolizer.append(text_symbolizer)
+
 
 
             # ================================================================================>
@@ -289,7 +289,7 @@ def create_sld(xml_content):
                     rules += '' + \
                              '<Rule>' + \
                              '<Name></Name>' + \
-                             min_scale_tag + max_scale_tag + polygon_symbolizer0 + text_symbolizer + \
+                             min_scale_tag + max_scale_tag + polygon_symbolizer0  + \
                              '</Rule>'
 
                 for symbol_layer in symbol_layers['CIMSymbolLayer']:
@@ -367,7 +367,7 @@ def create_sld(xml_content):
                 rule_symbolizer = rule_symbolizer[::-1]
                 rule_symbolizer.insert(0, max_scale_tag)
                 rule_symbolizer.insert(0, min_scale_tag)
-                rule_symbolizer.append(text_symbolizer)
+
 
             rules += '<Rule><Name>%s</Name>%s%s</Rule>' % (rule_filter_value, rule_filter, ''.join(rule_symbolizer))
 
@@ -427,7 +427,7 @@ def create_sld(xml_content):
             point_symbolizers = point_symbolizers[::-1]
             point_symbolizers.insert(0, max_scale_tag)
             point_symbolizers.insert(0, min_scale_tag)
-            point_symbolizers.append(text_symbolizer)
+
 
             feature_type_style += '<FeatureTypeStyle><Rule><Name/>%s</Rule></FeatureTypeStyle>' % (
                 ''.join(point_symbolizers))
@@ -465,7 +465,7 @@ def create_sld(xml_content):
             line_symbolizers = line_symbolizers[::-1]
             line_symbolizers.insert(0, max_scale_tag)
             line_symbolizers.insert(0, min_scale_tag)
-            line_symbolizers.append(text_symbolizer)
+
 
             feature_type_style += '<FeatureTypeStyle><Rule><Name/>%s</Rule></FeatureTypeStyle>' % (
                 ''.join(line_symbolizers))
