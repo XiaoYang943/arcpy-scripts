@@ -181,7 +181,7 @@ def generate_css_parameter(name, value):
     if name == 'font-size' or name == 'stroke-width':
         value = convert2pix(value)
     else:
-        value = value.strip().lower()
+        value = value.strip()
 
     return '<CssParameter name="%s">%s</CssParameter>' % (name, value)
 
@@ -289,7 +289,7 @@ def manage_character_marker(character_marker_dict):
 def manage_simple_marker(simple_marker_dict):
     result = ''
 
-    marker_shape = simple_marker_dict['Type'].lower()
+    marker_shape = simple_marker_dict['Type']
     if marker_shape not in ['square', 'circle', 'triangle', 'star', 'cross', 'x']:
         marker_shape = 'circle'
 
@@ -429,7 +429,7 @@ def manage_graphic_marker(graphic_marker_dict):
         if 'SimpleMarker' in marker_layer_type:
             # result += manage_simple_marker(marker_layer)
 
-            marker_shape = marker_layer['Type'].lower()
+            marker_shape = marker_layer['Type']
             if marker_shape not in ['square', 'circle', 'triangle', 'star', 'cross', 'x']:
                 marker_shape = 'circle'
             marker_size = marker_layer['Size']
@@ -508,8 +508,8 @@ def generate_text_symbolizer(label_classes):
 
         label_font_family = label['FontFamilyName']
         label_font_size = convert2pix(label['Height'])
-        label_font_style = label['FontStyleName'].lower()
-        label_font_weight = label['FontEffects'].lower()
+        label_font_style = label['FontStyleName']
+        label_font_weight = label['FontEffects']
 
         logging.info('Font family <<%s>> is being used at scale <<1:%s>>!' % (label_font_family, max_scale))
 

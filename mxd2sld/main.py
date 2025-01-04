@@ -74,7 +74,7 @@ def create_sld(xml_content):
     sld_min_scale = sld_root['MaxScale']
     sld_max_scale = sld_root['MinScale']
     sld_title = sld_root['Name']
-    sld_file_name = sld_root['FeatureTable']['DataConnection']['Dataset'].strip().lower()
+    sld_file_name = sld_root['FeatureTable']['DataConnection']['Dataset'].strip()
 
     print "Creaing SLD file for %s" % sld_file_name
 
@@ -99,10 +99,10 @@ def create_sld(xml_content):
 
         if 'Groups' in symbolizer:
             groups = symbolizer['Groups']['CIMUniqueValueGroup']['Classes']['CIMUniqueValueClass']
-            rule_filter_name = symbolizer['Fields']['String'].lower()
+            rule_filter_name = symbolizer['Fields']['String']
         elif 'Breaks' in symbolizer:
             groups = symbolizer['Breaks']['CIMClassBreak']
-            rule_filter_name = symbolizer['Field'].lower()
+            rule_filter_name = symbolizer['Field']
 
             lower_bound = '0'
             if 'MinimumBreak' in symbolizer:
@@ -383,7 +383,7 @@ def create_sld(xml_content):
     else:
         feature_type_style = ''
 
-        symbol_type = symbolizer['Symbol']['Symbol']['@xsi:type'].lower()
+        symbol_type = symbolizer['Symbol']['Symbol']['@xsi:type']
         symbol_layers = symbolizer['Symbol']['Symbol']['SymbolLayers']
 
         min_scale_tag = '<MinScaleDenominator>%s</MinScaleDenominator>' % sld_min_scale
