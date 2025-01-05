@@ -296,16 +296,16 @@ def create_sld(xml_content):
                     sub_symbol_type = symbol_layer['@xsi:type'].replace('typens:CIM', '')
 
                     if sub_symbol_type == 'FilledStroke':
-                        filled_stroke_part = manage_filled_stroke_layer(symbol_layer)
-                        polygon_stroke_pattern = '' + \
-                                                 '<PolygonSymbolizer>' + \
-                                                 '<Stroke>' + \
-                                                 '%s' % filled_stroke_part['result_stk'] + \
-                                                 '</Stroke>' + \
-                                                 '%s' % filled_stroke_part['result_pdc'] + \
-                                                 '</PolygonSymbolizer>'
-                        rule_symbolizer.append(polygon_stroke_pattern)
-
+                        # filled_stroke_part = manage_filled_stroke_layer(symbol_layer)
+                        # polygon_stroke_pattern = '' + \
+                        #                          '<PolygonSymbolizer>' + \
+                        #                          '<Stroke>' + \
+                        #                          '%s' % filled_stroke_part['result_stk'] + \
+                        #                          '</Stroke>' + \
+                        #                          '%s' % filled_stroke_part['result_pdc'] + \
+                        #                          '</PolygonSymbolizer>'
+                        # rule_symbolizer.append(polygon_stroke_pattern)
+                        continue;
                     elif sub_symbol_type == 'Fill':
                         pattern = symbol_layer['Pattern']
                         pattern_type = pattern['@xsi:type']
@@ -482,16 +482,16 @@ def create_sld(xml_content):
                 sub_symbol_type = symbol_layer['@xsi:type'].replace('typens:CIM', '')
 
                 if sub_symbol_type == 'FilledStroke':
-                    filled_stroke_part = manage_filled_stroke_layer(symbol_layer)
-                    polygon_stroke_pattern = '' + \
-                                             '<PolygonSymbolizer>' + \
-                                             '<Stroke>' + \
-                                             '%s' % filled_stroke_part['result_stk'] + \
-                                             '</Stroke>' + \
-                                             '%s' % filled_stroke_part['result_pdc'] + \
-                                             '</PolygonSymbolizer>'
-                    polygon_symbolizers.append(polygon_stroke_pattern)
-
+                    # filled_stroke_part = manage_filled_stroke_layer(symbol_layer)
+                    # polygon_stroke_pattern = '' + \
+                    #                          '<PolygonSymbolizer>' + \
+                    #                          '<Stroke>' + \
+                    #                          '%s' % filled_stroke_part['result_stk'] + \
+                    #                          '</Stroke>' + \
+                    #                          '%s' % filled_stroke_part['result_pdc'] + \
+                    #                          '</PolygonSymbolizer>'
+                    # polygon_symbolizers.append(polygon_stroke_pattern)
+                    continue;
                 elif sub_symbol_type == 'Fill':
                     pattern = symbol_layer['Pattern']
                     pattern_type = pattern['@xsi:type']
