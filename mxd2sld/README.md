@@ -3,7 +3,7 @@
 
 ## 调试代码、搭建环境
 ### arcgis desktop
-- 设置pycharm: `C:\Python27\ArcGIS10.8\python.exe`
+- 设置pycharm的python解释器: `C:\Python27\ArcGIS10.8\python.exe`
 ### arcgis pro(代码暂不支持，arcmap用的是python2，pro用的是python3，且arcpy这两个版本接口不一样)
 - [参考](https://blog.csdn.net/xza13155/article/details/124004121)
 
