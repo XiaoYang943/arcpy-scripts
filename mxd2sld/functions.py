@@ -1,3 +1,4 @@
+# coding=utf-8
 # A python script for generating SLDs
 # from ESRI ArcGIS map document (.mxd) files
 # Naghshara CO.
@@ -21,8 +22,8 @@ import string
 from datetime import datetime
 import codecs
 import glob
-
-
+import math
+from io import BytesIO
 
 logging.basicConfig(filename="log.log", level=logging.INFO)
 
@@ -700,7 +701,62 @@ def purge_project(_path_):
         os.chdir(_path_ + '\\layers')
         for file in glob.glob("*.xml"):
             os.remove(file)
-
     except Exception as e:
         print e
         raise ('Error in purging project!')
+
+# 获取最接近2的平方数的值，向下取整
+def get_nearest_square(num):
+    if num <= 0:
+        return 0
+    # 向下取整
+    return 2 ** int(math.floor(math.log(num, 2)))
+
+# 将base64字符串转换为图片对象
+def base64_to_image(base64_string):
+    # 去除base64前缀
+    if base64_string.startswith('data:image'):
+        base64_string = base64_string.split('base64,')[1]
+
+    # 解码base64
+    img_data = base64.b64decode(base64_string)
+
+    # 转换为图片
+    img = Image.open(BytesIO(img_data))
+    return img
+# mapbox样式的sprite图片规定size必须是2的平方
+def resize_image_to_nearest_square(base64_string):
+    """
+    裁剪图片为最接近2的平方的正方形
+    """
+    # 将base64字符串转换为图像
+    img = base64_to_image(base64_string)
+
+    # 获取原始宽度和高度
+    width, height = img.size
+
+    # 计算最接近2的平方的尺寸，向下取整
+    nearest_size = get_nearest_square(min(width, height))
+
+    # 计算裁剪区域，确保是从图像的中心裁剪
+    left = (width - nearest_size) // 2
+    top = (height - nearest_size) // 2
+    right = (width + nearest_size) // 2
+    bottom = (height + nearest_size) // 2
+
+    # 裁剪图像
+    cropped_img = img.crop((left, top, right, bottom))
+
+    # 将裁剪后的图像转换为 base64 字符串
+    buffered = BytesIO()
+    cropped_img.save(buffered, format="PNG")  # 保存为PNG格式，可以根据需要选择其他格式
+    img_byte_arr = buffered.getvalue()
+
+    base64_string = base64.b64encode(img_byte_arr).decode('utf-8')
+
+    # 需要添加前缀，保持base64图片格式一致
+    base64_image = "data:image/png;base64,{}".format(base64_string)  # 使用 `format()` 替换 f-string
+
+    return base64_image
+
+

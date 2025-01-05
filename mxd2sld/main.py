@@ -6,8 +6,10 @@ import json
 import codecs
 import datetime
 import argparse
-import arcpy
+import uuid
 
+import arcpy
+import base64
 from functions import *
 from xml.parsers.expat import ExpatError
 
@@ -312,7 +314,8 @@ def create_sld(xml_content):
                     elif sub_symbol_type == 'Fill':
                         pattern = symbol_layer['Pattern']
                         pattern_type = pattern['@xsi:type']
-
+                        print pattern_type
+                        # 纯色填充-对应arcgis的simple fill
                         if 'SolidPattern' in pattern_type:
                             pattern_dict = pattern['Color']
                             polygon_fill_solid = generate_hex_code(pattern_dict)
@@ -351,7 +354,18 @@ def create_sld(xml_content):
                         # [ignored part]
                         elif 'Tiled' in pattern_type:
                             polygon_fill_pattern = ''
+                            base64_str = pattern["URL"]
 
+
+                            base64_str = resize_image_to_nearest_square(base64_str)
+                            print base64_str
+                            if base64_str.startswith('data:image/png;base64,'):
+                                base64_str = base64_str.split('data:image/png;base64,')[1]
+
+                            img_data = base64.b64decode(base64_str)
+
+                            with open(generated_png_dir+'\\'+str(uuid.uuid4())+".png", 'wb') as f:
+                                f.write(img_data)
 
                         else:
                             raise Exception(
@@ -539,7 +553,6 @@ def create_sld(xml_content):
                     # [ignored part]
                     elif 'Tiled' in pattern_type:
                         polygon_fill_pattern = ''
-
                     else:
                         raise Exception(
                             "\n\nCreating Polygon Symbolizer => Unhandled pattern <<%s>>\n\n" % pattern_type)
@@ -575,8 +588,8 @@ if __name__ == "__main__":
     else:
         # 如果没有命令行参数，本地调试
         args = argparse.Namespace(
-            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\dltb\dltb.mxd',
-            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\dltb'
+            input=r'C:\Users\admin\Desktop\qinruyan\source\qinruyan1.mxd',
+            output=r'C:\Users\admin\Desktop\qinruyan\source'
         )
 
     mxd_file = arcpy.mapping.MapDocument(args.input)
@@ -600,6 +613,11 @@ if __name__ == "__main__":
         os.makedirs(generated_sld_dir)
 
     generated_img_dir = wrm_content_dir + "\\img_files"
+
+    generated_png_dir = wrm_content_dir + "\\png_files"
+    if not is_exist(generated_png_dir):
+        os.makedirs(generated_png_dir)
+
     if not is_exist(generated_img_dir):
         os.makedirs(generated_img_dir)
         tmp = codecs.open(os.path.abspath(os.path.join(msd_dir, os.pardir)) + "\\tmp.txt", "w", "utf-8")
