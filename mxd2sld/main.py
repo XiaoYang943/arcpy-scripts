@@ -5,6 +5,9 @@ import os
 import json
 import codecs
 import datetime
+import argparse
+import arcpy
+
 from functions import *
 from xml.parsers.expat import ExpatError
 
@@ -561,8 +564,29 @@ def create_sld(xml_content):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    # 定义命令行选项
+    parser.add_argument('-input', '--input', type=str, help='请指定mxd文件路径', required=True)
+    parser.add_argument('-output', '--output', type=str, help='请指定输出文件夹路径', required=True)
 
-    msd_full_path = r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\dltb\wrm.msd'
+    # 判断脚本是否通过命令行运行，并解析命令行参数
+    if len(os.sys.argv) > 1:
+        args = parser.parse_args()  # 如果有命令行参数，使用解析的参数
+    else:
+        # 如果没有命令行参数，本地调试
+        args = argparse.Namespace(
+            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\dltb\dltb.mxd',
+            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\dltb'
+        )
+
+    mxd_file = arcpy.mapping.MapDocument(args.input)
+    msd_name = 'wrm'
+    arcpy.mapping.ConvertToMSD(mxd_file, msd_name)
+
+
+    msd_full_name = msd_name + '.msd'
+    msd_full_path = os.path.join(args.output, msd_full_name)
+
     wrm_content_dir = extract_wrm(msd_full_path)
     if not wrm_content_dir:
         raise Exception("Cannot decompress <<wrm>> file.")
