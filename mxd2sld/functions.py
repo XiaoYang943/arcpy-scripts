@@ -757,6 +757,6 @@ def resize_image_to_nearest_square(base64_string):
     # 需要添加前缀，保持base64图片格式一致
     base64_image = "data:image/png;base64,{}".format(base64_string)  # 使用 `format()` 替换 f-string
 
-    return base64_image
+    return base64_image,nearest_size
 
 

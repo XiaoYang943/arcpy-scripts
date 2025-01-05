@@ -314,7 +314,7 @@ def create_sld(xml_content):
                     elif sub_symbol_type == 'Fill':
                         pattern = symbol_layer['Pattern']
                         pattern_type = pattern['@xsi:type']
-                        print pattern_type
+                        # print pattern_type
                         # 纯色填充-对应arcgis的simple fill
                         if 'SolidPattern' in pattern_type:
                             pattern_dict = pattern['Color']
@@ -353,19 +353,32 @@ def create_sld(xml_content):
 
                         # [ignored part]
                         elif 'Tiled' in pattern_type:
-                            polygon_fill_pattern = ''
                             base64_str = pattern["URL"]
 
+                            base64_str,nearest_size = resize_image_to_nearest_square(base64_str)
 
-                            base64_str = resize_image_to_nearest_square(base64_str)
-                            print base64_str
                             if base64_str.startswith('data:image/png;base64,'):
                                 base64_str = base64_str.split('data:image/png;base64,')[1]
 
                             img_data = base64.b64decode(base64_str)
-
-                            with open(generated_png_dir+'\\'+str(uuid.uuid4())+".png", 'wb') as f:
+                            name = str(uuid.uuid4())+".png"
+                            with open(generated_png_dir+'\\'+name, 'wb') as f:
                                 f.write(img_data)
+
+                            polygon_fill_pattern = '' + \
+                                                   '<PolygonSymbolizer>' + \
+                                                   '<Fill>' + \
+                                                   '<GraphicFill>' + \
+                                                   '<Graphic>' + \
+                                                   '<ExternalGraphic>' + \
+                                                   '<OnlineResource xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%s"/>' % name + \
+                                                   '<Format>image/png</Format>' + \
+                                                   '</ExternalGraphic>' + \
+                                                   '<Size>%s</Size>' % nearest_size + \
+                                                   '</Graphic>' + \
+                                                   '</GraphicFill>' + \
+                                                   '</Fill>' + \
+                                                   '</PolygonSymbolizer>'
 
                         else:
                             raise Exception(
@@ -588,8 +601,8 @@ if __name__ == "__main__":
     else:
         # 如果没有命令行参数，本地调试
         args = argparse.Namespace(
-            input=r'C:\Users\admin\Desktop\qinruyan\source\qinruyan1.mxd',
-            output=r'C:\Users\admin\Desktop\qinruyan\source'
+            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan\qinruyan.mxd',
+            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan'
         )
 
     mxd_file = arcpy.mapping.MapDocument(args.input)
