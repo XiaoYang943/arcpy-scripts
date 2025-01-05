@@ -68,7 +68,7 @@ def extract_wrm(_path_):
             raise Exception('WRM was not found. %s' % _path_)
 
         msd_dir, msd_name = os.path.split(_path_)
-        res_dir = os.path.abspath(os.path.join(msd_dir, os.pardir))
+        res_dir = msd_dir
         res_dir = os.path.join(res_dir, "%s (%s)" % (msd_name.replace('.msd', ''), now_date_time()))
 
         if not is_exist(res_dir):
