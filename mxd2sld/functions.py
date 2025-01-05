@@ -181,7 +181,7 @@ def generate_css_parameter(name, value):
     if name == 'font-size' or name == 'stroke-width':
         value = convert2pix(value)
     else:
-        value = value.strip()
+        value = value.strip().lower()
 
     return '<CssParameter name="%s">%s</CssParameter>' % (name, value)
 
