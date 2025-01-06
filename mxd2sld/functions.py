@@ -372,7 +372,7 @@ def manage_placed_point_layer(placed_point_layer_dict):
             symbol_type = symbol['@xsi:type']
 
             if 'CharacterMarker' in symbol_type:
-                result += '<GraphicStroke>%s</GraphicStroke>' % manage_character_marker(symbol)
+                result += '<GraphicStroke>%s</GraphicStroke>' % manage_character_marker(symbol,str(uuid.uuid4())+".png")
 
             # [ignored part]
             elif 'VectorMarker' in symbol_type:
@@ -483,7 +483,7 @@ def manage_graphic_marker(graphic_marker_dict):
 
 
         elif 'CharacterMarker' in marker_layer_type:
-            result += '<GraphicFill>%s</GraphicFill>' % manage_character_marker(marker_layer)
+            result += '<GraphicFill>%s</GraphicFill>' % manage_character_marker(marker_layer,str(uuid.uuid4())+".png")
 
         # [ignored part]
         elif 'PictureMarker' in marker_layer_type:

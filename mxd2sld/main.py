@@ -205,7 +205,6 @@ def create_sld(xml_content):
                         rule_symbolizer.append(_point_symbolizer)
 
                     elif 'CharacterMarker' in sub_symbol_type:
-                        print rule_filter_value
                         _point_symbolizer = '' + \
                                             '<PointSymbolizer>%s' % manage_character_marker(symbol_layer,rule_filter_value) + \
                                             '</PointSymbolizer>'
@@ -430,7 +429,7 @@ def create_sld(xml_content):
 
                 elif 'CharacterMarker' in sub_symbol_type:
                     _point_symbolizer = '' + \
-                                        '<PointSymbolizer>%s' % manage_character_marker(symbol_layer) + \
+                                        '<PointSymbolizer>%s' % manage_character_marker(symbol_layer,str(uuid.uuid4())+".png") + \
                                         '</PointSymbolizer>'
                     point_symbolizers.append(_point_symbolizer)
 
@@ -591,8 +590,8 @@ if __name__ == "__main__":
     else:
         # 如果没有命令行参数，本地调试
         args = argparse.Namespace(
-            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan\qinruyan.mxd',
-            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan'
+            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\shuixi\shuixi.mxd',
+            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\shuixi'
         )
 
     mxd_file = arcpy.mapping.MapDocument(args.input)
