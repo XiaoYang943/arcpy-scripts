@@ -674,3 +674,4 @@ if __name__ == "__main__":
 
     if is_exist(project_root_dir):
         purge_project(project_root_dir)
+
