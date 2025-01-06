@@ -28,3 +28,13 @@
 #### 执行脚本
 - 替换main.py主方法中的input和output参数
 - 执行主方法
+
+## 目前支持的symbol类型
+### 点
+- Character Marker Symbol(文本型标记)
+- Simple Marker Symbol(纯色)
+### 线
+- Simple Line Symbol(纯色)
+### 面
+- Picture Fill Symbol(面状纹理)
+- Simple Fill Symbol(纯色)

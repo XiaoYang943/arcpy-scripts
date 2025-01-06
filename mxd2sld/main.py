@@ -244,7 +244,7 @@ def create_sld(xml_content):
 
                 for symbol_layer in symbol_layers['CIMSymbolLayer']:
                     sub_symbol_type = symbol_layer['@xsi:type']
-
+                    # 符号线(Hash Line Symbol)
                     if 'PlacedPoint' in sub_symbol_type:
                         _line_symbolizer = '' + \
                                            '<LineSymbolizer>' + \
@@ -252,6 +252,7 @@ def create_sld(xml_content):
                                            '</LineSymbolizer>'
                         rule_symbolizer.append(_line_symbolizer)
 
+                    # 纯色填充线(Simple Line Symbol)
                     elif 'FilledStroke' in sub_symbol_type:
                         filled_stroke_part = manage_filled_stroke_layer(symbol_layer)
                         _line_symbolizer = '' + \
