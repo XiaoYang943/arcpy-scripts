@@ -13,8 +13,7 @@ import base64
 from functions import *
 from xml.parsers.expat import ExpatError
 
-
-
+import globalVar
 
 logging.basicConfig(filename="log.log", level=logging.INFO)
 
@@ -217,11 +216,12 @@ def create_sld(xml_content):
                         rule_symbolizer.append(_point_symbolizer)
 
                     elif 'CharacterMarker' in sub_symbol_type:
+                        print rule_filter_value
                         _point_symbolizer = '' + \
-                                            '<PointSymbolizer>%s' % manage_character_marker(symbol_layer) + \
+                                            '<PointSymbolizer>%s' % manage_character_marker(symbol_layer,rule_filter_value) + \
                                             '</PointSymbolizer>'
                         rule_symbolizer.append(_point_symbolizer)
-
+                        break;
                     elif 'SimpleMarker' in sub_symbol_type:
                         _point_symbolizer = '' + \
                                             '<PointSymbolizer>%s' % manage_simple_marker(symbol_layer) + \
@@ -590,6 +590,7 @@ def create_sld(xml_content):
 
 
 if __name__ == "__main__":
+    globalVar._init()
     parser = argparse.ArgumentParser()
     # 定义命令行选项
     parser.add_argument('-input', '--input', type=str, help='请指定mxd文件路径', required=True)
@@ -601,8 +602,8 @@ if __name__ == "__main__":
     else:
         # 如果没有命令行参数，本地调试
         args = argparse.Namespace(
-            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan\qinruyan.mxd',
-            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan'
+            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\kuangdiangai\kuangdiangai.mxd',
+            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\kuangdiangai'
         )
 
     mxd_file = arcpy.mapping.MapDocument(args.input)
@@ -628,8 +629,10 @@ if __name__ == "__main__":
     generated_img_dir = wrm_content_dir + "\\img_files"
 
     generated_png_dir = wrm_content_dir + "\\png_files"
+    globalVar.set_value('generated_png_dir', generated_png_dir)
     if not is_exist(generated_png_dir):
         os.makedirs(generated_png_dir)
+
 
     if not is_exist(generated_img_dir):
         os.makedirs(generated_img_dir)
@@ -638,6 +641,7 @@ if __name__ == "__main__":
         tmp.close()
 
     wrm_content_dir += "\\layers"
+
     for xml_file in os.listdir(wrm_content_dir):
 
         logging.info('\n')

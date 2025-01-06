@@ -6,6 +6,8 @@
 
 import os
 import json
+import uuid
+
 import xmltodict
 from xml.parsers.expat import ExpatError
 from shutil import copyfile
@@ -24,6 +26,9 @@ import codecs
 import glob
 import math
 from io import BytesIO
+import arcpy
+
+import globalVar
 
 logging.basicConfig(filename="log.log", level=logging.INFO)
 
@@ -200,49 +205,69 @@ def generate_symbol_mark_size(size):
 def generate_fill_tag(value):
     return '<Fill>%s</Fill>' % generate_css_parameter('fill', value)
 
-
+# 字符型 marker symbol
 def generate_character_marker(font_name, font_index, fill, font_size):
     result = ''
     result += generate_symbol_mark_wellknown(font_name, font_index)
     result += generate_fill_tag(fill)
     return '<Mark>%s</Mark>%s' % (result, generate_symbol_mark_size(font_size))
 
+def generate_character_marker_to_onlineresource(name,size):
+    return '' + \
+   '<ExternalGraphic>' + \
+   '<OnlineResource xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%s"/>' % name + \
+   '<Format>image/png</Format>' + \
+   '</ExternalGraphic>' + \
+   '<Size>%s</Size>' % size
 
-def generate_symbol_external_graphic(sym_name, sym_color, sym_size, font_family, font_index):
-    # sym_size = int(sym_size) * 1.33
-    sym_size = convert2pix(sym_size)
+def generate_symbol_external_graphic(name, sym_color, sym_size, font_family, font_index):
+    # 将符号大小转换为像素
+    sym_size = int(convert2pix(sym_size))
+    # 获取系统字体并查找匹配的字体
     sys_fonts = matplotlib.font_manager.fontManager.ttflist
+    # 字体文件所在位置，一般是C:\Windows\Fonts
+    font_dir = None
     for font in sys_fonts:
         if font.name == font_family:
             font_dir = font.fname
             break
 
-    if not is_exist(font_dir):
-        raise Exception("Unable to find font %s." % font_dir)
+    if not font_dir:
+        raise Exception("Unable to find font '{font_family}'.")
 
-    # sym_size = int(sym_size)
-    sym_size = convert2pix(sym_size)
-    sym_char = chr(int(font_index))
-    image = Image.new('RGBA', (sym_size, sym_size), (0, 0, 0, 0))
+    # 创建符号字符，例如将字体文件中的Character Marker转换为字符串
+    sym_char = chr(int(font_index))  # 将 Unicode 索引转换为字符
+
+    generate_symbol_image(font_dir, sym_char, sym_size,sym_color,globalVar.get_value('generated_png_dir') + "\\" + name)
+
+
+def generate_symbol_image(font_path, symbol, size, sym_color,output_path):
+    # print sym_color
+    # 创建空白图像，RGBA模式意味着支持透明背景
+    image = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+
     try:
-        font = ImageFont.truetype(font_dir, size=sym_size)
+        # 加载字体，设置字体大小
+        font = ImageFont.truetype(font_path, size)
+
+        # 创建ImageDraw对象，用来在图片上绘制
         drawing = ImageDraw.Draw(image)
-        w, h = drawing.textsize((sym_char), font=font)
-        drawing.text(
-            ((sym_size - w) / 2, (sym_size - h) / 2),
-            sym_char,
-            fill=sym_color,
-            font=font
-        )
-        symbol_dir = './msd/results/new_sld/images/%s.png' % sym_name
-        image.save(symbol_dir)
-        return '<Graphic><ExternalGraphic><OnlineResource xlink:type="simple" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="%s"/><Format>image/png</Format></ExternalGraphic><Size>%s</Size></Graphic>' % (
-        symbol_dir, sym_size)
-    except:
-        raise Exception("Exception in creating symbol from text.")
 
+        # 计算符号的宽高，确保符号居中
+        w, h = drawing.textsize(symbol, font=font)
+        text_position = ((size - w) / 2, (size - h) / 2)
 
-def manage_character_marker(character_marker_dict):
+        # 绘制符号到图像中
+        drawing.text(text_position, symbol, font=font, fill=sym_color)  # 使用黑色填充符号
+
+        # 保存图像为PNG格式
+        image.save(output_path, format='PNG')
+
+        # print(output_path)
+
+    except Exception as e:
+        print(e)
+def manage_character_marker(character_marker_dict,rule_filter_value):
     result = ''
     # symbol_character_font = find_font(character_marker_dict['FontFamilyName'])
     symbol_character_font = character_marker_dict['FontFamilyName']
@@ -268,12 +293,22 @@ def manage_character_marker(character_marker_dict):
             symbol_shape = symbol_shape['CIMSymbolLayer']
 
             if 'Pattern' in symbol_shape:
-                pattern_color = symbol_shape['Pattern']['Color']
+                if 'Color' not in symbol_shape['Pattern']:
+                    # 默认黑色
+                    pattern_color = {
+                        '@xsi:type': 'RGB',
+                        'R': 0,
+                        'G': 0,
+                        'B': 0
+                    }
+                else:
+                    pattern_color = symbol_shape['Pattern']['Color']
                 symbol_character_fill = generate_hex_code(pattern_color)
-                character_marker = generate_character_marker(
-                    symbol_character_font,
-                    symbol_character_index,
-                    symbol_character_fill,
+                name = rule_filter_value + ".png"
+                generate_symbol_external_graphic(name,symbol_character_fill,symbol_character_size,symbol_character_font,symbol_character_index)
+
+                character_marker = generate_character_marker_to_onlineresource(
+                    name,
                     symbol_character_size)
 
                 result += '<Graphic>%s</Graphic>' % character_marker
@@ -758,5 +793,3 @@ def resize_image_to_nearest_square(base64_string):
     base64_image = "data:image/png;base64,{}".format(base64_string)  # 使用 `format()` 替换 f-string
 
     return base64_image,nearest_size
-
-
