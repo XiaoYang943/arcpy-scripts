@@ -1,18 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-import json
-import codecs
-import datetime
 import argparse
-import uuid
-
-import arcpy
-import base64
 from functions import *
-from xml.parsers.expat import ExpatError
-
 import globalVar
 
 logging.basicConfig(filename="log.log", level=logging.INFO)
@@ -361,7 +350,7 @@ def create_sld(xml_content):
                                 base64_str = base64_str.split('data:image/png;base64,')[1]
 
                             img_data = base64.b64decode(base64_str)
-                            name = str(uuid.uuid4())+".png"
+                            name = rule_filter_value+".png"
                             with open(generated_png_dir+'\\'+name, 'wb') as f:
                                 f.write(img_data)
 
@@ -602,8 +591,8 @@ if __name__ == "__main__":
     else:
         # 如果没有命令行参数，本地调试
         args = argparse.Namespace(
-            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\kuangdiangai\kuangdiangai.mxd',
-            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\kuangdiangai'
+            input=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan\qinruyan.mxd',
+            output=r'D:\data\vector\mbtiles\linespaceOutPut\planetiler\qinruyan'
         )
 
     mxd_file = arcpy.mapping.MapDocument(args.input)
