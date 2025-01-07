@@ -29,6 +29,14 @@
 - 替换main.py主方法中的input和output参数
 - 执行主方法
 
+## 服务器离线环境安装依赖
+- cd到mxd2sld文件夹下
+- pip freeze >requirements.txt
+- pip download -d packages -r requirements.txt
+- 将mxd2sld文件夹拷贝到离线机器上的arcgis-python文件夹下，例如：C:\Python27\ArcGIS10.8
+- cd到C:\Python27\ArcGIS10.8文件夹下
+- pip install --no-index --find-links=C:\Python27\ArcGIS10.8\mxd2sld\packages -r C:\Python27\ArcGIS10.8\mxd2sld\requirements.txt
+
 ## 目前支持的symbol类型
 ### 点
 - Character Marker Symbol(文本型标记)
