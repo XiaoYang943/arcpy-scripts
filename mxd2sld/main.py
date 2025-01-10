@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import arcpy
 from functions import *
-import globalVar
-
-logging.basicConfig(filename="log.log", level=logging.INFO)
 
 tag_root = '' + \
            '<?xml version="1.0" encoding="UTF-8"?>' + \
@@ -76,7 +74,6 @@ def create_sld(xml_content):
     #     text_symbolizer = generate_text_symbolizer(label_class)
 
     # else:
-    #     logging.info('SLD file <<%s>> does not display labels => "DisplayLabels is FALSE"' % sld_file_name)
     #     text_symbolizer = ''
 
     label_class = sld_root['LabelClasses']['CIMLabelClass']
@@ -633,10 +630,6 @@ if __name__ == "__main__":
 
     for xml_file in os.listdir(wrm_content_dir):
 
-        logging.info('\n')
-        logging.info(datetime.now())
-        logging.info('Creating SLD for file <<%s>> .... ' % xml_file)
-
         if xml_file.endswith(".xml"):
             xml_style_dir = wrm_content_dir + "\\" + xml_file
             mxd_style_dict = parse_xml(xml_style_dir)
@@ -649,19 +642,10 @@ if __name__ == "__main__":
                 results.write(sld_content)
                 results.close()
 
-                logging.info('%s.sld file was created successfully.' % xml_file)
-
-            else:
-                logging.error('Error in creating SLD fild => <<%s>> .... ' % xml_file)
-                logging.error(sld_content)
 
         else:
             continue
 
-    logging.info('\n')
-    logging.info('Process Completed Successfully.')
-    logging.info('SLD Files -> %s' % generated_sld_dir)
-    logging.info('IMG Files -> %s' % generated_img_dir)
 
     print '\n'
     print '--------------------------------------------------------------------'

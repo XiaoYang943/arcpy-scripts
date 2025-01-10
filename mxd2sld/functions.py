@@ -4,33 +4,27 @@
 # Naghshara CO.
 
 
-import os
-import json
-import uuid
-
-import xmltodict
-from xml.parsers.expat import ExpatError
-from shutil import copyfile
-import zipfile
-from colorutils import hsv_to_rgb, rgb_to_hex
-from PIL import Image, ImageDraw, ImageFont
-import matplotlib.font_manager
-import pylab as pl
-from matplotlib.font_manager import findfont
-import logging
 import base64
-import random
-import string
-from datetime import datetime
 import codecs
 import glob
+import json
 import math
+import os
+import random
+import string
+import uuid
+import zipfile
+from datetime import datetime
 from io import BytesIO
-import arcpy
+from shutil import copyfile
+from xml.parsers.expat import ExpatError
+
+import matplotlib.font_manager
+import xmltodict
+from PIL import Image, ImageDraw, ImageFont
+from colorutils import hsv_to_rgb, rgb_to_hex
 
 import globalVar
-
-logging.basicConfig(filename="log.log", level=logging.INFO)
 
 
 def now_date_time():
@@ -547,7 +541,6 @@ def generate_text_symbolizer(label_classes):
         label_font_style = label['FontStyleName']
         label_font_weight = label['FontEffects']
 
-        logging.info('Font family <<%s>> is being used at scale <<1:%s>>!' % (label_font_family, max_scale))
 
         if 'Color' not in label['Symbol']['SymbolLayers']['CIMSymbolLayer']['Pattern']:
             label_font_color_hex = '#000000'

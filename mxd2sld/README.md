@@ -44,5 +44,5 @@
 ### 线
 - Simple Line Symbol(纯色)
 ### 面
-- Picture Fill Symbol(面状纹理)
+- Picture Fill Symbol(图片型面状纹理)
 - Simple Fill Symbol(纯色)
